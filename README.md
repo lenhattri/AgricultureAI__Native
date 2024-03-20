@@ -34,17 +34,5 @@ npm run dev
   
 - Component nên cố gắng chia nhỏ, không để component quá to
   
-- Sử dụng thư viện `react-query` để request API, không sử dụng trực tiếp axios
-  
-- Sử dụng `zustand` để quản lý global state, không sử dụng redux, không sử dụng context
-  
-- Đối với server state sử dụng `react-query` để cache, không lưu local state
-  
-- Sử dụng `react-hook-form` để quản lý form, không tự viết quản lý form
-  
-- Sử dụng `date-fns` để xử lý các vấn đề về thời gian, không tự viết phần thời gian
-  
-- Cố gắng sử dụng lodash, hạn chế tự viết (Link [lodash](https://lodash.com/))
-
 - Viết custom hooks nhiều nhất có thể, tách logic ra khỏi UI, ở components gọi hook, hook sẽ xử lý logic của business
   
