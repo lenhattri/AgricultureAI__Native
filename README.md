@@ -24,11 +24,11 @@ npm run dev
 
 - Khi cần viết 1 components, không đặt thẳng tên như Button.jsx, thay vào đó định nghĩa components sẽ định nghĩa folder trước, sau đó bên trong định nghĩa file [tên].jsx là file viết component, ví dụ Button/Button.jsx
   
-- Sử dụng module css, không sử dụng css in js
+
   
-- Cố gắng sử dụng các components đã có sẵn của thư viện Chakra UI, không viết lại các components đã có
+- Cố gắng sử dụng các components đã có sẵn của thư viện Magnus UI, không viết lại các components đã có
   
-- Cố gắng sử dụng css của Chakra UI
+- Cố gắng sử dụng css của Magnus UI
   
 - Sử dụng `ESlint` để format code 1 chuẩn chung. [**Tải ESlint trong vscode extensions**](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
   
