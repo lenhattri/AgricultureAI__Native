@@ -4,12 +4,20 @@ Install dependencies:
 ```bash
 npm install
 ```
-
+Create .env.local
+```bash
+cp .env.example .env.local
+//and change content with your api key
+```
 
 Run react server :
 ```bash
-npm run dev
+npm run android
 ```
+
+
+
+
 # LIBRARIES
 
 **Native development:** React Native
