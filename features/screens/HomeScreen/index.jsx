@@ -17,14 +17,13 @@ export default function HomeScreen() {
   } = useGptGenerater();
 
   const handleGenerate = async () => {
+    console.log("start handleGenerate ")
     if (currentThreadId) {
-      console.log("hello2");
       await continueConversation(promptInput);
     } else {
       await createThread();
       if (currentThreadId) {
-        console.log(hello);
-        console.log(messages);
+        
         await continueConversation(promptInput);
       }
     }
@@ -45,7 +44,7 @@ export default function HomeScreen() {
     <Div column flex={1} justifyContent="flex-start" bg="gray900">
       <Div column flex={1} justifyContent="flex-start" my={39}>
         <Div flex={6} overflow="scroll">
-          {/* {currentThreadId ? (
+          {currentThreadId ? (
             messages.map((message) => (
               <>
                 {message.role === "user" ? (
@@ -72,7 +71,7 @@ export default function HomeScreen() {
                 }}
               />
             </Div>
-          )} */}
+          )}
         </Div>
         <Div flex={1} row justifyContent="center" alignItems="flex-end">
           <Div flex={2}></Div>

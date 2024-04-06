@@ -34,24 +34,30 @@ const useGptGenerater = () => {
 
   const createThread = async () => {
     if (!openaiClient) {
+      console.log("Can't find openaiClient");
       return;
     }
 
     setIsLoading(true);
     setError(null);
+    if(error){
+      console.log(error);
+    }
 
     try {
       const { id: threadId } = await openaiClient.beta.threads.create({
         messages: [
           {
-            role: "system",
+            role: "assistant",
             content:
-              "Trợ lý là một chuyên gia về công tác khuyến nông cho các nông dân tại Việt Nam. Nhiệm vụ của trợ lý là trả lời các câu hỏi liên quan đến công tác khuyến nông",
+              "Tôi là một chuyên gia về công tác khuyến nông cho các nông dân tại Việt Nam. Nhiệm vụ của tôi là trả lời các câu hỏi liên quan đến công tác khuyến nông. Bạn cần hỏi gì ở tôi?",
           },
         ],
       });
       setCurrentThreadId(threadId);
+      console.log("ThreadId: ",threadId);
     } catch (err) {
+      console.log(err);
       setError(err);
     } finally {
       setIsLoading(false);
@@ -59,6 +65,7 @@ const useGptGenerater = () => {
   };
 
   const continueConversation = async (newMessage) => {
+    console.log("Start continueConversation")
     if (!currentThreadId || !openaiClient) {
       console.log("Hello");
       return;
@@ -97,6 +104,7 @@ const useGptGenerater = () => {
             console.log("almost");
             newMessages.body.data.map((message) => {
               console.log(message.content[0].text.value);
+              console.log(message.content[0]);
             });
           }
         };
