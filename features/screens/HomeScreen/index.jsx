@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 
 import { useState } from "react";
-import { Avatar, Div, Icon, Text, Input, Button } from "react-native-magnus";
+import { Avatar, Div, Icon, Text, Input, Button, ScrollDiv } from "react-native-magnus";
 import Message from "../../../components/Message";
 import useGptGenerater from "../../../hooks/useGptGenerater";
 export default function HomeScreen() {
@@ -17,16 +17,8 @@ export default function HomeScreen() {
   } = useGptGenerater();
 
   const handleGenerate = async () => {
-    console.log("start handleGenerate ")
-    if (currentThreadId) {
-      await continueConversation(promptInput);
-    } else {
-      await createThread();
-      if (currentThreadId) {
-        
-        await continueConversation(promptInput);
-      }
-    }
+    console.log("start handleGenerate ");
+    await continueConversation();
     setPromptInput("");
   };
 
@@ -43,22 +35,25 @@ export default function HomeScreen() {
   return (
     <Div column flex={1} justifyContent="flex-start" bg="gray900">
       <Div column flex={1} justifyContent="flex-start" my={39}>
-        <Div flex={6} overflow="scroll">
+        <ScrollDiv flex={6}>
           {currentThreadId ? (
-            messages.map((message) => (
+            messages.map((message, index) => (
               <>
                 {message.role === "user" ? (
                   <Message
+                    key={index}
                     username={userDetailRole.name}
                     message={message.content}
                   />
                 ) : (
                   <Message
-                    username={assistantDetailRole.name}
-                    message={message.content}
+                    key={index}
+                    username={message.name}
+                    message={isLoading ? "is loading" : message.content}
                     imageUri={assistantDetailRole.imageUri}
                   />
                 )}
+                {}
               </>
             ))
           ) : (
@@ -72,7 +67,7 @@ export default function HomeScreen() {
               />
             </Div>
           )}
-        </Div>
+        </ScrollDiv>
         <Div flex={1} row justifyContent="center" alignItems="flex-end">
           <Div flex={2}></Div>
           <Input
