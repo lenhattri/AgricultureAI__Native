@@ -1,3 +1,7 @@
+# INTRODUCE
+- Đây là một dự án xây dựng một base chatbot
+
+
 # INSTALLATION
 
 Install dependencies:
