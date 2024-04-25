@@ -78,6 +78,14 @@ const useGptGenerater = () => {
     setIsLoading(true);
     setError(null);
 
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        role: 'assistant',
+        content: 'Đang tải...',
+      },
+    ]);
+    
     try {
       await openaiClient.beta.threads.messages.create(currentThreadId, {
         role: "user",

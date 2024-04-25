@@ -1,7 +1,15 @@
 import React, { useContext } from "react";
 
 import { useState } from "react";
-import { Avatar, Div, Icon, Text, Input, Button, ScrollDiv } from "react-native-magnus";
+import {
+  Avatar,
+  Div,
+  Icon,
+  Text,
+  Input,
+  Button,
+  ScrollDiv,
+} from "react-native-magnus";
 import Message from "../../../components/Message";
 import useGptGenerater from "../../../hooks/useGptGenerater";
 export default function HomeScreen() {
@@ -17,9 +25,11 @@ export default function HomeScreen() {
   } = useGptGenerater();
 
   const handleGenerate = async () => {
-    console.log("start handleGenerate ");
-    await continueConversation();
-    setPromptInput("");
+    if (!isLoading) {
+      console.log("start handleGenerate ");
+      await continueConversation();
+      setPromptInput(""); 
+    }
   };
 
   const userDetailRole = {
@@ -35,7 +45,7 @@ export default function HomeScreen() {
   return (
     <Div column flex={1} justifyContent="flex-start" bg="gray900">
       <Div column flex={1} justifyContent="flex-start" my={39}>
-        <ScrollDiv flex={6}>
+        <ScrollDiv flex={8}>
           {currentThreadId ? (
             messages.map((message, index) => (
               <>
