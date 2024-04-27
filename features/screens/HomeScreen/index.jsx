@@ -18,7 +18,6 @@ export default function HomeScreen() {
     setMessages,
     isLoading,
     error,
-    createThread,
     continueConversation,
     switchThread,
   } = useGptGenerater();
