@@ -28,7 +28,7 @@ export default function Message(props) {
           {props.username}
         </Text>
         <Text color="white" fontSize={17}>
-          {props.message}
+        { props.message}
         </Text>
       </Div>
     </Div>

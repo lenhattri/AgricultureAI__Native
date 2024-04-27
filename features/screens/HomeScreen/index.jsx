@@ -1,6 +1,4 @@
-import React, { useContext } from "react";
-
-import { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Avatar,
   Div,
@@ -17,6 +15,7 @@ export default function HomeScreen() {
   const {
     currentThreadId,
     messages,
+    setMessages,
     isLoading,
     error,
     createThread,
@@ -27,8 +26,11 @@ export default function HomeScreen() {
   const handleGenerate = async () => {
     if (!isLoading) {
       console.log("start handleGenerate ");
-      await continueConversation();
-      setPromptInput(""); 
+      const currentPromptInput = promptInput;
+      setPromptInput("");
+      await continueConversation(currentPromptInput);
+
+      
     }
   };
 
@@ -42,44 +44,66 @@ export default function HomeScreen() {
   };
 
   useContext(() => {}, []);
+
   return (
     <Div column flex={1} justifyContent="flex-start" bg="gray900">
       <Div column flex={1} justifyContent="flex-start" my={39}>
-        <ScrollDiv flex={8}>
-          {currentThreadId ? (
-            messages.map((message, index) => (
-              <>
-                {message.role === "user" ? (
-                  <Message
-                    key={index}
-                    username={userDetailRole.name}
-                    message={message.content}
-                  />
-                ) : (
-                  <Message
-                    key={index}
-                    username={message.name}
-                    message={isLoading ? "is loading" : message.content}
-                    imageUri={assistantDetailRole.imageUri}
-                  />
-                )}
-                {}
-              </>
-            ))
-          ) : (
-            <Div>
-              <Avatar
-                shadow={1}
-                size={20}
-                source={{
-                  uri: assistantDetailRole.imageUri,
-                }}
-              />
-            </Div>
-          )}
-        </ScrollDiv>
+        <Div flex={6}>
+          <ScrollDiv>
+            {currentThreadId ? (
+              messages.map((message, index) => {
+                if (index < 1) {
+                  return;
+                }
+                return (
+                  <>
+                    {message.role === "user" ? (
+                      <Message
+                        key={index}
+                        username={userDetailRole.name}
+                        message={message.content}
+                      />
+                    ) : (
+                      <>
+                        {message.content === "Đang tải..." ? (
+                          <Text key={index} color="gray400">
+                            Assistant đang nhập...
+                          </Text>
+                        ) : (
+                          <Message
+                            key={index}
+                            username={assistantDetailRole.name}
+                            message={message.content}
+                            imageUri={assistantDetailRole.imageUri}
+                          />
+                        )}
+                      </>
+                    )}
+                  </>
+                );
+              })
+            ) : (
+              <Div flex={1} justifyContent="center" alignItems="center">
+                <Text fontSize="lg" color="white">Hãy nhập tin nhắn ở dưới</Text>
+              </Div>
+            )}
+          </ScrollDiv>
+        </Div>
+
         <Div flex={1} row justifyContent="center" alignItems="flex-end">
-          <Div flex={2}></Div>
+          <Div flex={2}>
+            <Button
+              h={56}
+              w={60}
+              rounded="circle"
+              ml={10}
+              bg="transparent"
+              onPress={() => switchThread()}
+            >
+              <Icon name="pluscircleo" fontFamily="AntDesign" fontSize={30} />
+            </Button>
+          </Div>
+
           <Input
             flex={7}
             placeholder="Nhập tin nhắn tại đây..."

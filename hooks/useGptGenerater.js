@@ -3,8 +3,6 @@ import { OpenAI } from "openai";
 
 const openai_api_key = process.env.EXPO_PUBLIC_OPENAI_API_KEY;
 const assistant_id = process.env.EXPO_PUBLIC_ASSISTANT_ID;
-console.log(openai_api_key);
-console.log(assistant_id);
 
 const useGptGenerater = () => {
   const [openaiClient, setOpenaiClient] = useState(null);
@@ -12,6 +10,7 @@ const useGptGenerater = () => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
   useEffect(() => {
     const createOpenaiClient = async () => {
       if (!openai_api_key) {
@@ -36,9 +35,7 @@ const useGptGenerater = () => {
       console.log("Can't find openaiClient");
       return;
     }
-    if(currentThreadId){
-      return;
-    }
+
     setIsLoading(true);
     setError(null);
     if (error) {
@@ -65,77 +62,96 @@ const useGptGenerater = () => {
   };
 
   const continueConversation = async (newMessage) => {
-    console.log("Start continueConversation");
     if (!openaiClient) {
-      console.log("Cant find openai client");
+      setError("Can't find openaiClient");
       return;
     }
-    if(!currentThreadId){
-      setIsLoading(true);
-      createThread(newMessage)
-    }
-    const assistant = await openaiClient.beta.assistants.retrieve(assistant_id);
+  
     setIsLoading(true);
     setError(null);
-
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      {
-        role: 'assistant',
-        content: 'Đang tải...',
-      },
-    ]);
-    
+  
     try {
-      await openaiClient.beta.threads.messages.create(currentThreadId, {
+      let threadId = currentThreadId;
+  
+      if (threadId == null) {
+        const thread = await openaiClient.beta.threads.create({
+          messages: [
+            {
+              role: "user",
+              content: newMessage,
+            }
+          ]
+        });
+        threadId = thread.id;
+        setCurrentThreadId(threadId);
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            role: "user",
+            content: newMessage,
+          }
+        ]);
+        console.log("ThreadId: ", threadId);
+      }
+  
+      await openaiClient.beta.threads.messages.create(threadId, {
         role: "user",
         content: newMessage,
       });
-
-      console.log("Hello");
-      const { id: runId } = await openaiClient.beta.threads.runs.create(
-        currentThreadId,
+  
+      setMessages((prevMessages) => [
+        ...prevMessages,
         {
-          assistant_id: assistant.id,
-        }
-      );
-      console.log("Before checkstatus");
+          role: "user",
+          content: newMessage,
+        },
+        {
+          role: "assistant",
+          content: "Đang tải...",
+        },
+      ]);
+  
+      const run = await openaiClient.beta.threads.runs.create(threadId, {
+        assistant_id: assistant_id,
+      });
+  
+      console.log("RunId: ", run.id);
+  
       await new Promise((resolve) => {
         const checkStatus = async () => {
           const { status } = await openaiClient.beta.threads.runs.retrieve(
-            currentThreadId,
-            runId
+            threadId,
+            run.id
           );
-
+  
           if (status === "completed") {
             resolve();
           } else {
-            const generatedMessages = await openaiClient.beta.threads.messages.list(
-              currentThreadId
-            );
-            let filtedMessages = generatedMessages.data.map((message,index) => ({
-              key: index,
-              name:assistant.name,
-              role: message.role,
-              content: message.content[0].text.value
-            }));
-            filtedMessages = [...filtedMessages].reverse()
-            filtedMessages.map(message => console.log (`${message.role} > ${message.content}`))
-            
-            setMessages(filtedMessages);
-            setIsLoading(false)
+            setTimeout(checkStatus, 1000);
           }
         };
-
-        try{
-          checkStatus();
-        } catch(err){
-          console.log(err)
-        }
+  
+        checkStatus();
       });
+  
+      const generatedMessages = await openaiClient.beta.threads.messages.list(
+        threadId
+      );
+  
+      let filtedMessages = generatedMessages.data.map((message) => ({
+        role: message.role,
+        content: message.content[0].text.value,
+      }));
+  
+      console.log(filtedMessages);
+      filtedMessages = [...filtedMessages].reverse();
+      filtedMessages.map((message) =>
+        console.log(`${message.role} > ${message.content}`)
+      );
+  
+      setMessages(filtedMessages);
     } catch (err) {
       setError(err);
-      console.log(err);
     } finally {
       setIsLoading(false);
     }
@@ -144,7 +160,6 @@ const useGptGenerater = () => {
   const switchThread = async () => {
     setCurrentThreadId(null);
     setMessages([]);
-    createThread();
   };
 
   return {
