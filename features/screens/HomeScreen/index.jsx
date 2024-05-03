@@ -26,9 +26,9 @@ export default function HomeScreen() {
     if (!isLoading) {
       console.log("start handleGenerate ");
       const currentPromptInput = promptInput;
-      setPromptInput("");
+      
       await continueConversation(currentPromptInput);
-
+      setPromptInput()
       
     }
   };

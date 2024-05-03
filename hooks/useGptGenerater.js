@@ -30,36 +30,7 @@ const useGptGenerater = () => {
     createOpenaiClient();
   }, []);
 
-  const createThread = async (newMessage) => {
-    if (!openaiClient) {
-      console.log("Can't find openaiClient");
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-    if (error) {
-      console.log(error);
-    }
-
-    try {
-      const { id: threadId } = await openaiClient.beta.threads.create({
-        messages: [
-          {
-            role: "user",
-            content: newMessage,
-          },
-        ],
-      });
-      setCurrentThreadId(threadId);
-      console.log("ThreadId: ", threadId);
-    } catch (err) {
-      console.log(err);
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  
 
   const continueConversation = async (newMessage) => {
     if (!openaiClient) {
@@ -167,7 +138,6 @@ const useGptGenerater = () => {
     messages,
     isLoading,
     error,
-    createThread,
     continueConversation,
     switchThread,
   };
