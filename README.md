@@ -34,7 +34,7 @@ npm run android
 
 # CONVENTION CODE
 
-- Khi cần viết 1 components, không đặt thẳng tên như Button.jsx, thay vào đó định nghĩa components sẽ định nghĩa folder trước, sau đó bên trong định nghĩa file [tên].jsx là file viết component, ví dụ Button/Button.jsx
+- Khi cần viết 1 components, không đặt thẳng tên như Button.jsx, thay vào đó định nghĩa components sẽ định nghĩa folder trước, sau đó bên trong định nghĩa file index.jsx là file viết component, ví dụ Button/index.jsx
   
 
   
