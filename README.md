@@ -1,3 +1,4 @@
+
 # INTRODUCE
 - Đây là một dự án xây dựng một base chatbot
 
@@ -48,3 +49,4 @@ npm run android
   
 - Viết custom hooks nhiều nhất có thể, tách logic ra khỏi UI, ở components gọi hook, hook sẽ xử lý logic của business
   
+
