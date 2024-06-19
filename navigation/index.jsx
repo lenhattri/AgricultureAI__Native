@@ -14,7 +14,6 @@ export default function Navigator() {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={HomepageHeaderConfig}
       />
       <Stack.Screen
         name="Home"

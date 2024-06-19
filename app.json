@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.letri.AgricultureAI"
     },
     "android": {
       "adaptiveIcon": {
@@ -27,6 +28,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "scheme": "agriculture_ai",
+    "extra": {
+      "eas": {
+        "projectId": "499d6ed1-5042-4fce-ad0d-4fe21f75b3ff"
+      }
     }
   }
 }

@@ -10,7 +10,7 @@ const useGptGenerater = () => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const [history,setHistory] = useState([])
   useEffect(() => {
     const createOpenaiClient = async () => {
       if (!openai_api_key) {
@@ -19,7 +19,7 @@ const useGptGenerater = () => {
       }
 
       try {
-        const client = new OpenAI({ apiKey: openai_api_key });
+        const client = new OpenAI({ apiKey: openai_api_key, dangerouslyAllowBrowser: true  });
         setOpenaiClient(client);
       } catch (err) {
         setError(err);
@@ -30,8 +30,8 @@ const useGptGenerater = () => {
     createOpenaiClient();
   }, []);
 
-  
 
+  
   const continueConversation = async (newMessage) => {
     if (!openaiClient) {
       setError("Can't find openaiClient");

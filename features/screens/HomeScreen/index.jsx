@@ -37,7 +37,6 @@ export default function HomeScreen() {
     name: "BẠN",
   };
   const assistantDetailRole = {
-    name: "BÁC HAI LÚA",
     imageUri:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1024px-React-icon.svg.png",
   };
