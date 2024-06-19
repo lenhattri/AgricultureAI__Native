@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
-import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import { Div, Text } from 'react-native-magnus';
+import store from '../../../redux/store';
+import { useSelector } from 'react-redux';
+import { userLoggedIn } from '../../../redux/currentUser/actions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Auth(Component) {
   const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
+  const user = AsyncStorage.getItem('@user')
   const navigation = useNavigation();
 
   // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) setInitializing(false);
-  }
+  
 
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
+   console.log(user)
+    const timer = setTimeout(() => {
+      setInitializing(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   function Wrapper(props) {

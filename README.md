@@ -1,3 +1,4 @@
+
 # INTRODUCE
 - Đây là một dự án xây dựng một base chatbot
 
@@ -34,7 +35,7 @@ npm run android
 
 # CONVENTION CODE
 
-- Khi cần viết 1 components, không đặt thẳng tên như Button.jsx, thay vào đó định nghĩa components sẽ định nghĩa folder trước, sau đó bên trong định nghĩa file index.jsx là file viết component, ví dụ Button/index.jsx
+- Khi cần viết 1 components, không đặt thẳng tên như Button.jsx, thay vào đó định nghĩa components sẽ định nghĩa folder trước, sau đó bên trong định nghĩa file [tên].jsx là file viết component, ví dụ Button/Button.jsx
   
 
   
@@ -48,3 +49,4 @@ npm run android
   
 - Viết custom hooks nhiều nhất có thể, tách logic ra khỏi UI, ở components gọi hook, hook sẽ xử lý logic của business
   
+

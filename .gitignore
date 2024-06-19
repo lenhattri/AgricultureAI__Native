@@ -38,3 +38,6 @@ yarn-error.*
 #google-services
 
 google-services.json
+
+android/
+ios/
