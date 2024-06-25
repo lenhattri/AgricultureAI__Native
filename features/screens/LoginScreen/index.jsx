@@ -21,13 +21,24 @@ export default function LoginScreen() {
 
   const handleSigninWithGoogle = async () => {
     console.log('handle sign in with google');
-    user = await AsyncStorage.getItem('@user');
-    console.log(user);
-    if (!user && response?.type === 'success') {
+    const user = await AsyncStorage.getItem('@user');
+    const token = await AsyncStorage.getItem('@jwtToken');
+    console.log("Retrieved user:", user);
+    console.log("Retrieved token:", token);
+
+    if (!user && !token && response?.type === 'success') {
+      console.log("has no user, token: ", token)
       await getUserInfo(response.authentication.accessToken);
     } else if (user) {
-      dispatch(userLoggedIn(JSON.parse(user)));
-      navigation.navigate('Home');
+      console.log("has user, token: ", token)
+      console.log(user)
+      try {
+        const parsedUser = JSON.parse(user);
+        dispatch(userLoggedIn(parsedUser));
+        navigation.navigate('Home');
+      } catch (error) {
+        console.error("Error parsing user JSON:", error);
+      }
     }
   };
 
@@ -35,6 +46,7 @@ export default function LoginScreen() {
     if (!token) {
       return;
     }
+
     try {
       const googleResponse = await fetch(
         'https://www.googleapis.com/userinfo/v2/me', {
@@ -43,25 +55,30 @@ export default function LoginScreen() {
         }
       });
       const googleUser = await googleResponse.json();
-
       // Send Google user info to backend
+      
       const backendResponse = await fetch('http://localhost:3000/api/v1/auth/google', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ user: googleUser }),
+        body: JSON.stringify({
+          user: googleUser
+        }),
       });
-      const { token: jwtToken, newUser } = await backendResponse.json();
-
+      
+      
+      console.log("auth gooogle api call finished")
+      const {newUser, userId,token: jwtToken } = await backendResponse.json()
+      console.log("new user: ", newUser)
       // If the user is new, save the new user data
       if (newUser) {
-        await AsyncStorage.setItem('@user', JSON.stringify(googleUser));
+        await AsyncStorage.setItem('@user', JSON.stringify({ ...googleUser, "id": userId }));
       }
 
       // Store JWT token and user info
       await AsyncStorage.setItem('@jwtToken', jwtToken);
-      await AsyncStorage.setItem('@user', JSON.stringify(googleUser));
+      await AsyncStorage.setItem('@user', JSON.stringify({ ...googleUser, "id": userId }));
 
       dispatch(userLoggedIn(googleUser));
       navigation.navigate('Home');
